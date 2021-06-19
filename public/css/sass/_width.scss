@@ -1,0 +1,15 @@
+@media (max-width: 678px) {
+  nav {
+    .container-1 {
+      .toggole {
+        display: inline-block;
+      }
+    }
+    .hide-me {
+      display: none !important;
+    }
+    .show-me {
+      display: flex !important;
+    }
+  }
+}
