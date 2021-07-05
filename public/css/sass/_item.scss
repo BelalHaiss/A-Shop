@@ -1,0 +1,30 @@
+.item-details {
+  .item-price-details {
+    font-weight: 100;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 12px;
+  }
+  .item-price-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+
+  .input-color {
+    display: inline-block;
+    width: 25%;
+    text-transform: capitalize;
+    border-radius: 5px;
+    font-size: 1.1rem;
+
+    text-align: center;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid black;
+  }
+  .active-color {
+    color: #fff !important;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+  }
+}

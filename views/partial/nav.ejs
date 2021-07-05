@@ -1,15 +1,25 @@
-<nav>
-    <div class="container  container-1">
-        <input placeholder="Search" type="text" class="form-control hide-me nav-input ">
+<nav class="bg-light">
+    <div class="container   border-bottom container-1 ">
 
-        <a class="navbar-brand" href="#">A-Shop</a>
+        <a class="navbar-brand" href="/">A-Shop</a>
 
 
         <div class="nav__icons hide-me ">
 
+            <% if( !currentUser) { %>
+                <a href="/register" class="nav__icons nav-link"> Sign Up </a>
+                <a href="/login" class="nav__icons nav-link "> login </a>
+                <% } else { %>
+                    <a href=""> <i class="bi bi-person nav__icons"></i></a>
+                    <a href=""> <i class="bi bi-cart2 nav__icons">
+                            <span class="cart-items-numbers">
+                                <%= userInfo.cart && userInfo.cart.products.length>= 1 ? userInfo.cart.products.length :
+                                    null %>
+                            </span>
 
-            <a href=""> <i class="bi bi-person nav__icons"></i></a>
-            <a href=""> <i class="bi bi-cart2 nav__icons"></i></a>
+                        </i></a> <a href="/logout" class="nav__icons nav-link "> logout </a>
+                    <% } %>
+
 
         </div>
         <a class="nav__icons toggole">
@@ -18,21 +28,31 @@
 
     </div>
 
-    <hr>
-    <div class="container nav__icons container-2 hide-me">
-        <a href="" class="nav-link">home</a>
+
+    <div class="container nav__icons container-2  hide-me">
+        <a href="/products" class="nav-link">home</a>
         <a href="" class="nav-link">about</a>
         <a href="" class="nav-link">contact</a>
 
     </div>
     <div class="container md-screen">
         <div class="md-screen__top">
-            <input placeholder="Search" type="text" class="form-control nav-input ">
             <div class="nav__icons ">
 
 
-                <a href=""> <i class="bi bi-person nav__icons"></i></a>
-                <a href=""> <i class="bi bi-cart2 nav__icons"></i></a>
+
+                <% if(!currentUser) { %>
+                    <a href="/register" class="nav__icons nav-link"> Sign Up </a>
+                    <a href="/login" class="nav__icons nav-link "> login </a>
+                    <% } else { %>
+                        <a href=""> <i class="bi bi-person nav__icons"></i></a>
+                        <a href=""> <i class="bi bi-cart2 nav__icons">
+                                <span class="cart-items-numbers">2</span>
+
+                            </i></a>
+                        <a href="/logout" class="nav__icons nav-link "> logout </a>
+                        <% } %>
+
 
             </div>
         </div>

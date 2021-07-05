@@ -1,0 +1,96 @@
+<%- layout('layout/boilerplate') %>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mt-5 mx-auto">
+                <form action="/products" method="POST" novalidate class="needs-validation addItem"
+                    enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="image"> Add Product image </label>
+                        <input type="file" class="form-control" multiple name="productImage" id="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="name"> Add Product name </label>
+                        <input required type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Details"> Add Product Details </label>
+                        <input required type="text" class="form-control" name="Details" id="Details">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price"> Add Product price </label>
+                        <input type="number" min="1" class="form-control" required name="price" id="Details">
+                    </div>
+                    <div class="form-group">
+                        <label for="QTY"> Add Product QTY </label>
+                        <input required type="number" min="1" class="form-control" name="QTY" id="QTY">
+                    </div>
+                    <div class="form-group product-new border p-2 my-3">
+                        <div class="color-dropdown p-2 bg-danger  d-inline-block ">
+                            <label for="colors"> Add Product colors </label>
+                            <i class="bi ms-2 bi-color fs-5 bi-arrow-down-square-fill"></i>
+                        </div>
+                        <p class="  mt-2"> <i class="fs-5  bi bi-exclamation-triangle-fill text-warning"></i>
+                            Hold
+                            down the Ctrl
+                            (windows) or Command (Mac) button to select
+                            multiple options.</p>
+                        <select aria-label="Default select example " required class="form-select color-select hide"
+                            name="colors" id="colors" multiple>
+                            <option value="white">white</option>
+                            <option value="black">black</option>
+                            <option value="grey">grey</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select from the options
+                        </div>
+                    </div>
+                    <div class="form-group product-new border p-2 my-3">
+                        <div class="color-dropdown p-2 bg-info  d-inline-block ">
+                            <label for="size"> Add Product sizes </label>
+                            <i class="bi ms-2 bi-size fs-5 bi-arrow-down-square-fill"></i>
+                        </div>
+                        <p class="  mt-2"> <i class="fs-5 bi bi-exclamation-triangle-fill text-warning"></i>
+                            Hold
+                            down the Ctrl
+                            (windows) or Command (Mac) button to select
+                            multiple options.</p>
+                        <select aria-label="Default select example " required class="form-select size-select hide"
+                            name="size" id="size" multiple>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select from the options
+                        </div>
+                    </div>
+
+
+                    <button class="btn btn-success my-3 w-100 d-block">ADD THE PRODUCT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const colorArrow = document.querySelector('.bi-color')
+        const sizeArrow = document.querySelector('.bi-size')
+        const showSelectColor = () => {
+            const selectMenue = document.querySelector('.color-select')
+            selectMenue.classList.toggle('show')
+        }
+        const showSelectSize = () => {
+            const selectMenue = document.querySelector('.size-select')
+            selectMenue.classList.toggle('show')
+        }
+        colorArrow.addEventListener('click', showSelectColor)
+        sizeArrow.addEventListener('click', showSelectSize)
+    </script>

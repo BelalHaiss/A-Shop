@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@600&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 *,
 *::after,
 *::before {
@@ -16,8 +17,9 @@ html {
 }
 
 body {
-  font-family: 'Comfortaa', Helvetica, Arial, sans-serif;
+  font-family: 'Quicksand', 'Comfortaa', Helvetica, Arial, sans-serif;
   line-height: 1.6;
+  font-weight: 400;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

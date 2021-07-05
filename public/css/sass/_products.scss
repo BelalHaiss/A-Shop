@@ -1,0 +1,13 @@
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  // gap: 0.1rem;
+  & &__card {
+    border: 1px solid $color-primary-dark;
+    flex-basis: 185px;
+    // height: 300px;
+    overflow: hidden;
+  }
+}

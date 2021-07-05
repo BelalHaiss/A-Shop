@@ -1,0 +1,189 @@
+<%- layout('layout/boilerplate') %>
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-12 col-lg-5 ">
+
+                <img src="<%= item.img.url || process.env.defaultShoesImage  %>" alt="" class="img-fluid">
+            </div>
+            <!-- check if iam admin  -->
+
+            <div class="col-12 col-lg-4 item-details">
+                <% if(isAdmin && isAdmin===true) { %>
+                    <div class="admin-access">
+                        <a href="/products/<%= item._id %>/edit " class="btn d-block btn-warning my-3">EDIT THE
+                            PRDOUCT</a>
+                        <form action="/products/<%= item._id %>/?_method=delete" method="POST">
+                            <button class="btn btn-danger w-100 d-block">DELETE THE PRODUCT</button>
+                        </form>
+                    </div>
+                    <% } %>
+                        <p class="fs-4  mx-auto ">
+                            <%= item.name %>
+                        </p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-8">
+
+                                <% if( item.promotion && item.promotion.active) { %>
+                                    <p class="fs-4 text-success">
+                                        <%= afterDiscount(item) %> <span class="">EGP</span>
+                                    </p>
+                                    <div class="old d-flex justify-content-between">
+
+                                        <p class="  text-muted">
+                                            <s>
+                                                <%= item.price %> <span class="">EGP</span>
+                                            </s>
+                                        </p>
+                                        <p class="  ms-auto fs-5  text-danger">
+                                            <%= item.promotion.percent %>% off
+                                        </p>
+                                    </div>
+                                    <% } else { %>
+                                        <p class=" fs-4 text-danger">
+                                            <%= item.price %> <span class="fs-5">EGP</span>
+                                        </p>
+                                        <% } %>
+                            </div>
+                            <hr>
+                            <div class="col-6">
+                                <p class=" item-price-details"> <span class="item-price-icon "><i
+                                            class="bi bi-cash text-success "></i></span>Cash
+                                    On
+                                    Delivery available</p>
+                                <p class=" item-price-details"> <span class="item-price-icon"><i
+                                            class="bi bi-credit-card text-success"></i></span>
+                                    Payment Options : ( Cash On Delivery Only )
+
+                                </p>
+                            </div>
+                            <div class="col-6">
+
+                                <p class=" item-price-details mt-1 ">
+                                    Delivers To 'your location' </p>
+
+                            </div>
+                        </div>
+                        <form class="needs-validation" novalidate action="/products/<%= item._id %>" method="post"
+                            class="d inline-block">
+
+                            <div class="quantity">
+
+                                <label for="qty" class=" fs-4">QTY</label>
+
+                                <select class="form-select" required name="item[qty]" aria-label="1 is selected default"
+                                    id="qty">
+                                    <option value="1" selected>1 </option>
+                                    <% for (let qty=2; qty <=item.quantity; qty++) {%>
+                                        <option required value="<%= qty %>">
+                                            <%= qty %>
+                                        </option>
+                                        <% } %>
+
+                                </select>
+
+                            </div>
+                            <div class="item-select my-3">
+                                <label for="size" class="fs-4"> Select Size</label>
+                                <select name="item[size]" required class="form-select" id="size">
+                                    <option value=""> Available Size</option>
+                                    <%for(let size of item.size) { %>
+
+                                        <option>
+                                            <%= size %>
+
+                                        </option>
+                                        <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    make sure that u selected the Size
+                                </div>
+                            </div>
+                            <div class="color">
+                                <label for="color" class="text-dark d-block fs-4 ">Select Color</label>
+                                <select name="item[color]" required class="form-select" id="Color">
+                                    <option value=""> Available Color</option>
+                                    <% for ( let color of item.color) { %>
+                                        <option class="input-color" value="<%=color %>">
+                                            <%= color %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                                <div class="invalid-feedback">
+                                    make sure that u selected the Color
+                                </div>
+                            </div>
+                            <div class="my-5">
+
+                                <button class="btn btn-success w-100 d-block">ADD TO CART <i
+                                        class="ms-2 bi bi-cart-plus "></i></button>
+                            </div>
+                        </form>
+
+
+            </div>
+        </div>
+        <hr>
+        <div class="description col-12 col-lg-6 mx-auto">
+            <p class="fs-4 mt-5 text-center mb-2">Description </p>
+            <p>
+                <%= item.descr %>
+            </p>
+        </div>
+
+        <div class="col-12 col-lg-6 mx-auto border-top p-5 mt-5">
+            <h2 class="text-center">Reviews</h2>
+            <form class="needs-validation" novalidate action="/products/<%= item._id %>/reviews" method="post">
+                <div class="mb-3">
+                    <fieldset class="starability-heartbeat">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0"
+                            aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" checked value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-check-label">We 're happy to know your review</label>
+                    <textarea class="form-control" name="review[comment]" id="comment" cols="30" rows="3"
+                        required></textarea>
+                </div>
+                <button class="btn btn-success">Submit</button>
+            </form>
+            <div class="item-reviews mt-5">
+                <% for(let review of item.reviews) { %>
+                    <div class="mt-4 p-2 border">
+
+                        <p class="starability-result" data-rating=<%=review.rating%>>
+                            Rated: <%= review.rating %> stars
+                        </p>
+                        <p class="">
+                            <%= review.comment%>
+
+                        </p>
+                        <p class="card-subtitle text-muted  ">
+                            submited by <b>
+                                <%= review.author.username %>
+                            </b>
+                        </p>
+                        <!-- here wiill be auth check -->
+                        <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                            <form action="/products/<%= item._id %>/reviews/<%= review._id %>/?_method=delete"
+                                method="post" class="d-inline-block">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                            <% } %>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>
+
+    </div>

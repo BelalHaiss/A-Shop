@@ -4,12 +4,25 @@
         <h2>Offer !! </h2>
     </div>
     <div class="main">
-        <div class="card" style="width: 18rem;">
-            <img src="https://source.unsplash.com/900x900/?sneakers,shoes" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title text-center  fs-4">Sneaker </h5>
-                <p class="card-text  my-3"> <span class="fs-3"> 200</span> EGP </p>
-                <a href="#" class="btn btn-success d-block text-center"> View Details</a>
-            </div>
+        <div class="products-container ">
+            <% for(let item of products) { %>
+
+                <div class="card products-container__card">
+                    <img src="<%= item.img.url || process.env.defaultShoesImage%>" class="  card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title  fs-5">
+                            <%= item.name %>
+                        </h5>
+                        <p class="card-text  my-3">
+                            <span class="fs-3">
+                                <%= item.price %>
+                            </span> EGP
+                        </p>
+                        <a href="products/<%= item._id %>" class="btn btn-success d-block text-center"> View
+                            Details</a>
+                    </div>
+                </div>
+                <% } %>
         </div>
+
     </div>

@@ -1,0 +1,38 @@
+<%- layout('layout/boilerplate') %>
+    <div class="container">
+        <div class="card w-50 mx-auto mt-5">
+            <div class="card-body">
+                <h5 class="card-title fs-2 text-primary text-center">
+                    <%= promotion.name %>
+                </h5>
+
+                <p class="card-text">
+                    Promotion percetange <b>
+                        <%= promotion.percent %> %
+                    </b>
+                </p>
+                <p class="card-text">
+                    started at <b>
+                        <%= promotion.createdAt.toDateString() %>
+                    </b>
+                </p>
+                <p class="card-text">
+                    will expire at <b>
+                        <%= promotion.expired.toDateString() %>
+                    </b>
+                </p>
+                <p class="card-text">
+                    <% if(promotion.allProduct) { %>
+                        <b>Available To all Products</b>
+                        <% } else { %>
+                            <b>NOT Available To all Products</b>
+
+                            <% } %>
+                </p>
+                <form action="/promotion/<%= promotion._id %>/?_method=delete" method="post">
+                    <button href="#" class="btn w-100 btn-danger d-block mx-auto mt-5">Delete Promotion</button>
+                </form>
+
+            </div>
+        </div>
+    </div>

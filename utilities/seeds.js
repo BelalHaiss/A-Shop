@@ -13,8 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const product_1 = require("../models/product");
-console.log(product_1.Product);
+const user_js_1 = __importDefault(require("../models/user.js"));
 const dbUrl = 'mongodb://localhost:27017/a-shop';
 mongoose_1.default
     .connect(dbUrl, {
@@ -31,4 +30,10 @@ mongoose_1.default
     console.log(e);
 });
 const seeds = () => __awaiter(void 0, void 0, void 0, function* () {
+    const newUser = yield user_js_1.default.deleteOne({ email: 'admin@gmail.com' });
+    console.log(newUser);
 });
+seeds();
+// Product.findById('60d245bf84989b47e49a874c').then((res: void) => {
+//   console.log(res);
+// });

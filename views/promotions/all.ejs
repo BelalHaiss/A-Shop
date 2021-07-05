@@ -1,0 +1,14 @@
+<%- layout('layout/boilerplate') %>
+
+    <div class="container">
+        <div class="row">
+            <% for(let promotion of promotions) { %>
+                <div class="my-3 col-12 col-lg-3 ms-5 p-2 alert alert-success">
+                    <h2>
+                        <%= promotion.name %>
+                    </h2>
+                    <a href="/promotion/<%= promotion._id %>" class="btn d-block btn-dark"> View </a>
+                </div>
+                <% } %>
+        </div>
+    </div>
