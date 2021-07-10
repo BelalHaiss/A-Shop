@@ -20,10 +20,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
-const router = express_1.Router({ mergeParams: true });
-const middleware_js_1 = require("../utilities/middleware.js");
+const Cart_js_1 = require("../controllers/Cart.js");
+const router = express_1.Router();
 const app = express_1.default();
-const review_js_1 = require("../controllers/review.js");
-router.post('/', middleware_js_1.isAuth, middleware_js_1.wrapAsync(review_js_1.postReview));
-router.delete('/:reviewID', middleware_js_1.isAuth, middleware_js_1.wrapAsync(review_js_1.deleteReview));
+const middleware_js_1 = require("../utilities/middleware.js");
+router
+    .route('/')
+    .get(middleware_js_1.isAuth, middleware_js_1.wrapAsync(Cart_js_1.viewCart))
+    .post(middleware_js_1.isAuth, middleware_js_1.wrapAsync(Cart_js_1.deleteFromCart));
 exports.default = router;

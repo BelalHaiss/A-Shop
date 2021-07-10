@@ -9,13 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAdmin = exports.isAuth = exports.isRegisterable = void 0;
+exports.isAdmin = exports.isAuth = exports.isRegisterable = exports.wrapAsync = void 0;
 const appError_js_1 = require("./appError.js");
-const isRegisterable = (req, res, next) => {
+const wrapAsync = function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch((e) => next(e));
+    };
+};
+exports.wrapAsync = wrapAsync;
+const isRegisterable = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.user)
         return next(new appError_js_1.appError('you can`t sign up while your are login , you can logout and get back', 400));
     next();
-};
+});
 exports.isRegisterable = isRegisterable;
 const isAuth = (req, res, next) => {
     if (!req.isAuthenticated()) {

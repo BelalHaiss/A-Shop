@@ -1,46 +1,44 @@
 <%- layout('layout/boilerplate') %>
 
-    <%- layout('layout/boilerplate') %>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mt-5 mx-auto">
+                <form action="/products/<%= product._id %>/?_method=Patch" method="POST" novalidate
+                    class="needs-validation addItem" enctype="multipart/form-data">
+                    <div class="form-group alert alert-success">
+                        <label for="promotion"> Add promotion name </label>
+                        <input type="text" class="form-control" name="promotion" id="promotion">
+                    </div>
+                    <div class="form-group">
+                        <label for="image"> Change Product image </label>
+                        <input type="file" class="form-control" multiple name="productImage" id="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="name"> Change Product name </label>
+                        <input required type="text" class="form-control" value="<%= product.name %>" name="name"
+                            id="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Details"> Change Product Details </label>
+                        <input required type="text" class="form-control" value="<%= product.descr%>" name="Details"
+                            id="Details">
+                    </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-lg-6 mt-5 mx-auto">
-                    <form action="/products/<%= product._id %>/?_method=Patch" method="POST" novalidate
-                        class="needs-validation addItem" enctype="multipart/form-data">
-                        <div class="form-group alert alert-success">
-                            <label for="promotion"> Add promotion name </label>
-                            <input type="text" class="form-control" name="promotion" id="promotion">
-                        </div>
-                        <div class="form-group">
-                            <label for="image"> Change Product image </label>
-                            <input type="file" class="form-control" multiple name="productImage" id="image">
-                        </div>
-                        <div class="form-group">
-                            <label for="name"> Change Product name </label>
-                            <input required type="text" class="form-control" value="<%= product.name %>" name="name"
-                                id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="Details"> Change Product Details </label>
-                            <input required type="text" class="form-control" value="<%= product.descr%>" name="Details"
-                                id="Details">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="price"> Change Product price </label>
-                            <input type="number" class="form-control" value="<%= product.price %>" required name="price"
-                                id="Details">
-                        </div>
-                        <div class="form-group">
-                            <label for="QTY"> Product QTY </label>
-                            <input required type="number" class="form-control" value="<%= product.quantity %>"
-                                name="QTY" id="QTY">
-                        </div>
+                    <div class="form-group">
+                        <label for="price"> Change Product price </label>
+                        <input type="number" class="form-control" value="<%= product.price %>" required name="price"
+                            id="Details">
+                    </div>
+                    <div class="form-group">
+                        <label for="QTY"> Product QTY </label>
+                        <input required type="number" class="form-control" value="<%= product.quantity %>" name="QTY"
+                            id="QTY">
+                    </div>
 
 
 
-                        <button class="btn btn-success my-3 w-100 d-block">CHANGE THE PRODUCT Details</button>
-                    </form>
-                </div>
+                    <button class="btn btn-success my-3 w-100 d-block">CHANGE THE PRODUCT Details</button>
+                </form>
             </div>
         </div>
+    </div>

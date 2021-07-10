@@ -16,7 +16,8 @@ const PromotionSchema: any = new Schema({
   createdAt: {
     type: Date,
     min: '2021-06-23',
-    max: '2035-05-23'
+    max: '2035-05-23',
+    required: true
   },
   allProduct: {
     type: Boolean,
@@ -35,15 +36,15 @@ const PromotionSchema: any = new Schema({
 });
 
 PromotionSchema.post('save', async function (doc) {
-  const docDate = doc.createdAt.toISOString();
-  const nowDate = new Date().toISOString();
-  docDate < nowDate || docDate === nowDate
+  const docDate = doc.createdAt.setHours(0, 0, 0, 0);
+  const nowDate = new Date().setHours(0, 0, 0, 0);
+
+  docDate <= nowDate
     ? null
     : await Promotion.findByIdAndUpdate(doc._id, {
         active: false
       });
-
-  if (doc.allProduct === true && (docDate < nowDate || docDate === nowDate)) {
+  if (doc.allProduct === true && docDate >= nowDate) {
     await Product.updateMany({}, { promotion: doc._id });
   }
 });
@@ -104,6 +105,14 @@ productSchmea.post('findOneAndRemove', async function (doc) {
     await Review.deleteMany({
       _id: { $in: doc.reviews }
     });
+  }
+});
+productSchmea.virtual('sized').get(function () {
+  if (this.img.url) {
+    return this.img.url.replace(
+      '/upload',
+      '/upload/w_900,h_900,,ar_1:1,c_fill,g_auto'
+    );
   }
 });
 const Product: any = mongoose.model('Product', productSchmea);

@@ -1,6 +1,6 @@
 import { appError } from '../utilities/appError.js';
 import User from '../models/user.js';
-export const renderRegister = (req, res, next) => {
+export const renderRegister = async (req, res, next) => {
   res.render('users/register');
 };
 
@@ -23,18 +23,27 @@ export const register = async (req, res, next) => {
     res.redirect('register');
   }
 };
-export const renderLogin = (req, res) => {
+export const renderLogin = async (req, res) => {
   res.render('users/login');
 };
-export const login = (req, res) => {
+export const login = async (req, res) => {
+  if (
+    req.user.username === 'admin' &&
+    req.user._id.toString() === process.env.adminId
+  ) {
+    req.session.admin = true;
+  }
   const redirectUrl = req.session.returnTo || '/products';
   res.redirect(redirectUrl);
   delete req.session.returnTo;
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   if (req.session.admin === true) {
     delete req.session.admin;
+  }
+  if (req.session.returnTo) {
+    delete req.session.returnTo;
   }
   req.logout();
 

@@ -21,7 +21,7 @@ export const showAllPromotions = async (req, res, next) => {
     next(e);
   }
 };
-export const promotionPageForm = (req, res, next) => {
+export const promotionPageForm = async (req, res, next) => {
   req.flash(
     'warning',
     'if you add a starting date not coming yet you will have to promotion name manually'
@@ -46,15 +46,17 @@ export const postPromotion = async (req, res, next) => {
     }
 
     const { allProduct } = req.body;
+    const docDateStarted = new Date(req.body.promotion.createdAt).setHours(
+      0,
+      0,
+      0,
+      0
+    );
+    const expired = new Date(req.body.promotion.expired).setHours(0, 0, 0, 0);
+    const nowDate = new Date().setHours(0, 0, 0, 0);
 
-    const started = req.body.promotion.createdAt
-      .replace('-', '')
-      .replace('-', '');
-    const expired = req.body.promotion.expired
-      .replace('-', '')
-      .replace('-', '');
-    if (!(started < expired)) {
-      return next(new appError('check your expired date again', 400));
+    if (docDateStarted > expired || docDateStarted < nowDate) {
+      return next(new appError('check your  date details again', 400));
     }
     const promotion: any = await new Promotion(req.body.promotion);
 

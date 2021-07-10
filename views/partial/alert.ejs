@@ -29,3 +29,13 @@
             </div>
 
             <% } %>
+                <% if(warning && warning.length) { %>
+
+                    <div id="alert" class="alert alert-warning flash-alert alert-dismissible fade show" role="alert">
+                        <strong>
+                            <%= warning %>
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <% } %>

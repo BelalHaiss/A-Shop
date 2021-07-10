@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 const router = Router({ mergeParams: true });
 const app = express();
-import { isAdmin, isAuth } from '../utilities/middleware.js';
+import { isAdmin, isAuth, wrapAsync } from '../utilities/middleware.js';
 
 import {
   promotionPageForm,
@@ -13,12 +13,12 @@ import {
 
 router
   .route('/')
-  .get(isAuth, isAdmin, showAllPromotions)
-  .post(isAuth, isAdmin, postPromotion);
-router.route('/new').get(isAuth, isAdmin, promotionPageForm);
+  .get(isAuth, isAdmin, wrapAsync(showAllPromotions))
+  .post(isAuth, isAdmin, wrapAsync(postPromotion));
+router.route('/new').get(isAuth, isAdmin, wrapAsync(promotionPageForm));
 router
   .route('/:id')
-  .get(isAuth, isAdmin, showSinglePromotion)
-  .delete(isAuth, isAdmin, deletePromotion);
+  .get(isAuth, isAdmin, wrapAsync(showSinglePromotion))
+  .delete(isAuth, isAdmin, wrapAsync(deletePromotion));
 
 export default router;

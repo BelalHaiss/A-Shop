@@ -13,10 +13,18 @@ const cartSchema = new mongoose_1.default.Schema({
                 type: mongoose_1.default.Schema.Types.ObjectId,
                 ref: 'Product'
             },
-            cartQty: Number
+            cartQty: { type: Number, required: true },
+            size: { type: Number, required: true },
+            color: { type: String, required: true },
+            price: { type: Number, required: true },
+            discount: { type: Number, required: true }
         }
     ],
     total: {
+        type: Number,
+        required: true
+    },
+    subTotal: {
         type: Number,
         required: true
     },

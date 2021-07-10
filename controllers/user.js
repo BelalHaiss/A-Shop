@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.login = exports.renderLogin = exports.register = exports.renderRegister = void 0;
 const user_js_1 = __importDefault(require("../models/user.js"));
-const renderRegister = (req, res, next) => {
+const renderRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.render('users/register');
-};
+});
 exports.renderRegister = renderRegister;
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,21 +39,28 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.register = register;
-const renderLogin = (req, res) => {
+const renderLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.render('users/login');
-};
+});
 exports.renderLogin = renderLogin;
-const login = (req, res) => {
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.user.username === 'admin' &&
+        req.user._id.toString() === process.env.adminId) {
+        req.session.admin = true;
+    }
     const redirectUrl = req.session.returnTo || '/products';
     res.redirect(redirectUrl);
     delete req.session.returnTo;
-};
+});
 exports.login = login;
-const logout = (req, res) => {
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.session.admin === true) {
         delete req.session.admin;
     }
+    if (req.session.returnTo) {
+        delete req.session.returnTo;
+    }
     req.logout();
     res.redirect('/campgrounds');
-};
+});
 exports.logout = logout;

@@ -34,17 +34,17 @@ const fileSize = {
 const multer_1 = __importDefault(require("multer"));
 const upload = multer_1.default({ storage: cloudinary_js_1.storage, limits: fileSize });
 const product_js_1 = require("../controllers/product.js");
-router.route('/new').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, product_js_1.newProduct);
+router.route('/new').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(product_js_1.newProduct));
 router
     .route('/')
     .get(product_js_1.productsHome)
-    .post(middleware_js_1.isAuth, middleware_js_1.isAdmin, upload.single('productImage'), product_js_1.postNewItem);
+    .post(middleware_js_1.isAuth, middleware_js_1.isAdmin, upload.single('productImage'), middleware_js_1.wrapAsync(product_js_1.postNewItem));
 router
     .route('/:id')
-    .post(middleware_js_1.isAuth, product_js_1.addToCart)
+    .post(middleware_js_1.isAuth, middleware_js_1.wrapAsync(product_js_1.addToCart))
     .get(product_js_1.productItem)
-    .patch(middleware_js_1.isAuth, middleware_js_1.isAdmin, upload.single('productImage'), product_js_1.postEditForm)
-    .delete(middleware_js_1.isAuth, middleware_js_1.isAdmin, product_js_1.deleteProduct);
-router.route('/:id/edit').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, product_js_1.editItemForm);
+    .patch(middleware_js_1.isAuth, middleware_js_1.isAdmin, upload.single('productImage'), middleware_js_1.wrapAsync(product_js_1.postEditForm))
+    .delete(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(product_js_1.deleteProduct));
+router.route('/:id/edit').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(product_js_1.editItemForm));
 exports.default = router;
 // (itemToCartSchema, addToCart);

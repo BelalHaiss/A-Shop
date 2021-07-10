@@ -24,6 +24,7 @@ const method_override_1 = __importDefault(require("method-override"));
 const productRoute_js_1 = __importDefault(require("./routes/productRoute.js"));
 const promotionRoute_js_1 = __importDefault(require("./routes/promotionRoute.js"));
 const reviewRoute_1 = __importDefault(require("./routes/reviewRoute"));
+const cartRoute_1 = __importDefault(require("./routes/cartRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const appError_js_1 = require("./utilities/appError.js");
 const connect_flash_1 = __importDefault(require("connect-flash"));
@@ -94,13 +95,23 @@ app.use((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         }).populate('cart');
     }
     res.locals.afterDiscount = uts_js_1.afterDiscount;
+    req.session.lang
+        ? (res.locals.lang = req.session.lang)
+        : (res.locals.lang = 'en');
     res.locals.isAdmin = req.session.admin;
+    res.locals.req = req;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     res.locals.warning = req.flash('warning');
     next();
 }));
 app.use('/', userRoute_1.default);
+app.use('/setLang', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const lang = res.locals.lang;
+    lang === 'en' ? (req.session.lang = 'ar') : (req.session.lang = 'en');
+    return res.end();
+}));
+app.use('/cart', cartRoute_1.default);
 app.use('/promotion', promotionRoute_js_1.default);
 app.use('/products', productRoute_js_1.default);
 app.use('/products/:id/reviews', reviewRoute_1.default);

@@ -26,11 +26,11 @@ const middleware_js_1 = require("../utilities/middleware.js");
 const promotion_1 = require("../controllers/promotion");
 router
     .route('/')
-    .get(middleware_js_1.isAuth, middleware_js_1.isAdmin, promotion_1.showAllPromotions)
-    .post(middleware_js_1.isAuth, middleware_js_1.isAdmin, promotion_1.postPromotion);
-router.route('/new').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, promotion_1.promotionPageForm);
+    .get(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(promotion_1.showAllPromotions))
+    .post(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(promotion_1.postPromotion));
+router.route('/new').get(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(promotion_1.promotionPageForm));
 router
     .route('/:id')
-    .get(middleware_js_1.isAuth, middleware_js_1.isAdmin, promotion_1.showSinglePromotion)
-    .delete(middleware_js_1.isAuth, middleware_js_1.isAdmin, promotion_1.deletePromotion);
+    .get(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(promotion_1.showSinglePromotion))
+    .delete(middleware_js_1.isAuth, middleware_js_1.isAdmin, middleware_js_1.wrapAsync(promotion_1.deletePromotion));
 exports.default = router;

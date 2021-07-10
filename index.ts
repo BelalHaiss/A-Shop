@@ -11,12 +11,11 @@ import Product from './models/product.js';
 import ProductRoute from './routes/productRoute.js';
 import promotionRoute from './routes/promotionRoute.js';
 import reviewRoutes from './routes/reviewRoute';
+import cartRoute from './routes/cartRoute';
 import userRoute from './routes/userRoute';
 import { appError } from './utilities/appError.js';
-import { itemToCartSchema } from './utilities/Joi.js';
 import flash from 'connect-flash';
 import session from 'express-session';
-
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import localStrategy from 'passport-local';
@@ -91,23 +90,32 @@ app.use(async (req: any, res, next) => {
       username: req.user.username
     }).populate('cart');
   }
-
   res.locals.afterDiscount = afterDiscount;
-
+  req.session.lang
+    ? (res.locals.lang = req.session.lang)
+    : (res.locals.lang = 'en');
   res.locals.isAdmin = req.session.admin;
+  res.locals.req = req;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.warning = req.flash('warning');
   next();
 });
-
 app.use('/', userRoute);
+app.use('/setLang', async (req: any, res: any, next) => {
+  const lang = res.locals.lang;
+  lang === 'en' ? (req.session.lang = 'ar') : (req.session.lang = 'en');
+
+  return res.end();
+});
+app.use('/cart', cartRoute);
 app.use('/promotion', promotionRoute);
 app.use('/products', ProductRoute);
 app.use('/products/:id/reviews', reviewRoutes);
 app.use('/', (req, res) => {
   res.redirect('/products');
 });
+
 app.all('*', (req, res, next) => {
   next(new appError('Page Not Found', 404));
 });

@@ -1,5 +1,12 @@
 import { appError } from './appError.js';
-export const isRegisterable = (req, res, next) => {
+
+export const wrapAsync = function wrapAsync(fn) {
+  return function (req, res, next) {
+    fn(req, res, next).catch((e) => next(e));
+  };
+};
+
+export const isRegisterable = async (req, res, next) => {
   if (req.user)
     return next(
       new appError(
@@ -27,6 +34,7 @@ export const isAdmin = async (req, res, next) => {
     req.user._id.toString() === process.env.adminId
   ) {
     req.session.admin = true;
+
     next();
   } else {
     req.flash('error', 'Your are not authorized for this');

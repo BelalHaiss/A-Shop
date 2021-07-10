@@ -8,7 +8,7 @@ import { Application, Request, Response, NextFunction } from 'express';
 import { object } from 'joi';
 import { cloudinary } from '../cloudinary/cloudinary.js';
 export const productsHome = async (req: Request, res: Response) => {
-  const products = await Product.find({});
+  const products = await Product.find({}).populate('promotion');
   res.render('store/home', { products });
 };
 export const productItem = async (
@@ -21,7 +21,6 @@ export const productItem = async (
     const item = await Product.findById(id)
       .populate({ path: 'reviews', populate: { path: 'author' } })
       .populate('promotion');
-
     res.render('store/item', { item });
   } catch (e) {
     return next(
@@ -32,8 +31,7 @@ export const productItem = async (
     );
   }
 };
-export const newProduct = (req, res, next) => {
-  // authNeeded
+export const newProduct = async (req, res, next) => {
   res.render('store/newItem');
 };
 
@@ -46,16 +44,28 @@ export const addToCart = async (req, res, next) => {
     const colorValidation = item.color.includes(color);
     const user = await User.findById(req.user._id);
 
-    if (item.quantity >= qty && foundSize && colorValidation) {
-      const finalPrice = afterDiscount(item) * qty;
+    if (item.quantity >= qty && foundSize && colorValidation && qty > 0) {
+      const finalPrice = afterDiscount(item).price * qty;
+      const discount = afterDiscount(item).discount * qty;
+      const itemPrice = afterDiscount(item).itemPrice * qty;
       if (!user.cart) {
         const newCart = await Cart.create({
-          products: { item, cartQty: qty },
+          products: {
+            item,
+            cartQty: qty,
+            size,
+            color,
+            price: finalPrice,
+            discount
+          },
           user,
-          total: finalPrice
+          total: finalPrice,
+          subTotal: itemPrice
         });
+
         user.cart = newCart._id;
         req.flash('success', 'Added To The Cart');
+
         await user.save();
       } else {
         const updatedCart: any = await Cart.findById(user.cart);
@@ -63,14 +73,25 @@ export const addToCart = async (req, res, next) => {
         const itemIsThere = updatedCart.products.some((el) => {
           return el.item.toString() === item._id.toString() ? true : false;
         });
-        if (!itemIsThere) {
-          updatedCart.products.push({ item, cartQty: qty });
-          updatedCart.total = updatedCart.total + finalPrice;
-          await updatedCart.save();
-          req.flash('success', 'Added To The Cart');
-        } else {
-          req.flash('error', 'You already have this product on your cart');
-        }
+
+        updatedCart.products.push({
+          item,
+          cartQty: qty,
+          color,
+          size,
+          price: finalPrice,
+          discount
+        });
+        updatedCart.total = updatedCart.total + finalPrice;
+        updatedCart.subTotal = updatedCart.subTotal + itemPrice;
+        await updatedCart.save();
+
+        !itemIsThere
+          ? req.flash('success', 'Added To The Cart')
+          : req.flash(
+              'warning',
+              'You added an item that is already on the cart'
+            );
       }
 
       res.redirect(`/products/${id}`);
@@ -145,7 +166,14 @@ export const postEditForm = async (req, res, next) => {
       if (details) {
         const detailsDate = details.createdAt.getTime();
         const nowDate = new Date().getTime();
-        detailsDate > nowDate ? null : (product.promotion = details._id);
+        detailsDate > nowDate
+          ? req.flash(
+              'warning',
+              'Please add the promotion on it`s started date or after it'
+            )
+          : (product.promotion = details._id);
+      } else {
+        req.flash('error', 'no promotion with this name ');
       }
     }
     product.save();

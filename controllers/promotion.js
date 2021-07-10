@@ -36,7 +36,7 @@ const showAllPromotions = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.showAllPromotions = showAllPromotions;
-const promotionPageForm = (req, res, next) => {
+const promotionPageForm = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     req.flash('warning', 'if you add a starting date not coming yet you will have to promotion name manually');
     try {
         res.render('promotions/newPromotion', { messages: req.flash('warning') });
@@ -44,7 +44,7 @@ const promotionPageForm = (req, res, next) => {
     catch (e) {
         next(e);
     }
-};
+});
 exports.promotionPageForm = promotionPageForm;
 const postPromotion = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -53,14 +53,11 @@ const postPromotion = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             return next(new appError_js_1.appError('there`s a Promotion with same name so please create another one with another name', 400));
         }
         const { allProduct } = req.body;
-        const started = req.body.promotion.createdAt
-            .replace('-', '')
-            .replace('-', '');
-        const expired = req.body.promotion.expired
-            .replace('-', '')
-            .replace('-', '');
-        if (!(started < expired)) {
-            return next(new appError_js_1.appError('check your expired date again', 400));
+        const docDateStarted = new Date(req.body.promotion.createdAt).setHours(0, 0, 0, 0);
+        const expired = new Date(req.body.promotion.expired).setHours(0, 0, 0, 0);
+        const nowDate = new Date().setHours(0, 0, 0, 0);
+        if (docDateStarted > expired || docDateStarted < nowDate) {
+            return next(new appError_js_1.appError('check your  date details again', 400));
         }
         const promotion = yield new product_js_2.Promotion(req.body.promotion);
         if (allProduct === 'all') {

@@ -1,0 +1,83 @@
+<%- layout('layout/boilerplate') %>
+    <div class="row">
+
+        <% if(cart.products.length < 1) { %>
+            <div id="alert" class="alert alert-warning mt-5 alert-dismissible fade show" role="alert">
+                <strong class="text-center">
+                    You didn`t add any product to your Cart yet
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } else { %>
+
+                <!-- <b class="fs-5"> total <%= cart.total %>
+                </b>
+                <b class="fs-5"> total <%= cart.products[0] %>
+                </b> -->
+                <div class="col-12 col-md-8">
+
+                    <h5 class="my-3">Cart (<%= cart.products.length %> Items )</h5>
+
+                    <% for(let product of cart.products) { %>
+
+                        <div class="cart__product border p-3 mb-3">
+                            <div class="row">
+                                <div class="col-3"> <a href="/products/<%=product.item._id  %> "> <img class="img-fluid"
+                                            src="<%= product.item.sized || process.env.defaultShoesImage %> "
+                                            alt=""></a>
+                                </div>
+                                <div class="col-6 d-flex flex-column  justify-content-center">
+                                    <p class="fs-4">
+                                        <%= product.item.name %>
+                                    </p>
+                                    <p> Size : <span class="fs-5">
+                                            <%= product.size %>
+                                        </span>
+                                    </p>
+                                    <p> color : <span class="fs-5">
+                                            <%= product.color %>
+                                        </span>
+                                    </p>
+                                    <form action="/cart" method="POST">
+                                        <input type="hidden" name="cartId" value="<%= cart._id %>">
+                                        <input type="hidden" name="item" value="<%= product.item._id %>">
+                                        <input type="hidden" name="cartQty" value="<%= product.cartQty %>">
+                                        <input type="hidden" name="discount" value="<%= product.discount %>">
+                                        <input type="hidden" name="price" value="<%= product.price %>">
+                                        <input type="hidden" name="color" value="<%= product.color %>">
+                                        <input type="hidden" name="size" value="<%= product.size %>">
+                                        <button class="btn btn-outline-danger"> <i class="bi bi-trash fs-5"> </i>
+                                            Remove </button>
+
+                                    </form>
+                                </div>
+                                <div class="col-3 d-flex flex-column align-items-end justify-content-evenly">
+                                    <div
+                                        class="product-price   d-flex flex-column align-items-end justify-content-start">
+                                        <p class="fs-5 text-danger d-inline-block " style="margin-bottom: 5px;">
+                                            <%= product.price %> EGP
+                                        </p>
+
+                                        <% if(product.item.promotion && product.item.promotion.active) { %>
+                                            <span class="badge p-2  d-inline-block   bg-success ms-auto ">Discout :
+                                                ON</span>
+
+                                            <% } %>
+                                    </div>
+                                    <button class="btn w-50  btn-outline-dark">
+                                        <%= product.cartQty %>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% } %>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="my-5 p-1 border cart-checkout">
+                        <b>Order Summary</b>
+                        <p>Subtotal: </p>
+                    </div>
+                </div>
+    </div>
+    <% } %>

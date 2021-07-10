@@ -1,8 +1,7 @@
 import express, { Router } from 'express';
 const router = Router();
 const app = express();
-import { itemToCartSchema } from '../utilities/Joi.js';
-import { isAdmin, isAuth } from '../utilities/middleware.js';
+import { isAdmin, isAuth, wrapAsync } from '../utilities/middleware.js';
 import { storage } from '../cloudinary/cloudinary.js';
 const fileSize = {
   fileSize: 1024 * 1024 * 2,
@@ -20,18 +19,23 @@ import {
   deleteProduct,
   postEditForm
 } from '../controllers/product.js';
-router.route('/new').get(isAuth, isAdmin, newProduct);
+router.route('/new').get(isAuth, isAdmin, wrapAsync(newProduct));
 router
   .route('/')
   .get(productsHome)
-  .post(isAuth, isAdmin, upload.single('productImage'), postNewItem);
+  .post(isAuth, isAdmin, upload.single('productImage'), wrapAsync(postNewItem));
 router
   .route('/:id')
-  .post(isAuth, addToCart)
+  .post(isAuth, wrapAsync(addToCart))
   .get(productItem)
-  .patch(isAuth, isAdmin, upload.single('productImage'), postEditForm)
-  .delete(isAuth, isAdmin, deleteProduct);
+  .patch(
+    isAuth,
+    isAdmin,
+    upload.single('productImage'),
+    wrapAsync(postEditForm)
+  )
+  .delete(isAuth, isAdmin, wrapAsync(deleteProduct));
 
-router.route('/:id/edit').get(isAuth, isAdmin, editItemForm);
+router.route('/:id/edit').get(isAuth, isAdmin, wrapAsync(editItemForm));
 export default router;
 // (itemToCartSchema, addToCart);

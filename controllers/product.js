@@ -21,7 +21,7 @@ const product_js_2 = require("../models/product.js");
 const appError_js_1 = require("../utilities/appError.js");
 const cloudinary_js_1 = require("../cloudinary/cloudinary.js");
 const productsHome = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_js_1.default.find({});
+    const products = yield product_js_1.default.find({}).populate('promotion');
     res.render('store/home', { products });
 });
 exports.productsHome = productsHome;
@@ -38,10 +38,9 @@ const productItem = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.productItem = productItem;
-const newProduct = (req, res, next) => {
-    // authNeeded
+const newProduct = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.render('store/newItem');
-};
+});
 exports.newProduct = newProduct;
 const addToCart = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -51,13 +50,23 @@ const addToCart = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         const foundSize = item.size.includes(size);
         const colorValidation = item.color.includes(color);
         const user = yield user_js_1.default.findById(req.user._id);
-        if (item.quantity >= qty && foundSize && colorValidation) {
-            const finalPrice = uts_js_1.afterDiscount(item) * qty;
+        if (item.quantity >= qty && foundSize && colorValidation && qty > 0) {
+            const finalPrice = uts_js_1.afterDiscount(item).price * qty;
+            const discount = uts_js_1.afterDiscount(item).discount * qty;
+            const itemPrice = uts_js_1.afterDiscount(item).itemPrice * qty;
             if (!user.cart) {
                 const newCart = yield cart_js_1.Cart.create({
-                    products: { item, cartQty: qty },
+                    products: {
+                        item,
+                        cartQty: qty,
+                        size,
+                        color,
+                        price: finalPrice,
+                        discount
+                    },
                     user,
-                    total: finalPrice
+                    total: finalPrice,
+                    subTotal: itemPrice
                 });
                 user.cart = newCart._id;
                 req.flash('success', 'Added To The Cart');
@@ -68,15 +77,20 @@ const addToCart = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                 const itemIsThere = updatedCart.products.some((el) => {
                     return el.item.toString() === item._id.toString() ? true : false;
                 });
-                if (!itemIsThere) {
-                    updatedCart.products.push({ item, cartQty: qty });
-                    updatedCart.total = updatedCart.total + finalPrice;
-                    yield updatedCart.save();
-                    req.flash('success', 'Added To The Cart');
-                }
-                else {
-                    req.flash('error', 'You already have this product on your cart');
-                }
+                updatedCart.products.push({
+                    item,
+                    cartQty: qty,
+                    color,
+                    size,
+                    price: finalPrice,
+                    discount
+                });
+                updatedCart.total = updatedCart.total + finalPrice;
+                updatedCart.subTotal = updatedCart.subTotal + itemPrice;
+                yield updatedCart.save();
+                !itemIsThere
+                    ? req.flash('success', 'Added To The Cart')
+                    : req.flash('warning', 'You added an item that is already on the cart');
             }
             res.redirect(`/products/${id}`);
         }
@@ -148,7 +162,12 @@ const postEditForm = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             if (details) {
                 const detailsDate = details.createdAt.getTime();
                 const nowDate = new Date().getTime();
-                detailsDate > nowDate ? null : (product.promotion = details._id);
+                detailsDate > nowDate
+                    ? req.flash('warning', 'Please add the promotion on it`s started date or after it')
+                    : (product.promotion = details._id);
+            }
+            else {
+                req.flash('error', 'no promotion with this name ');
             }
         }
         product.save();

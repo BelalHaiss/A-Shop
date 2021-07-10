@@ -24,9 +24,12 @@
                         <div class="row">
                             <div class="col-8">
 
-                                <% if( item.promotion && item.promotion.active) { %>
+                                <% if( item.promotion && item.promotion.active &&item.promotion.expired.setHours(0, 0,
+                                    0, 0)>= new Date().setHours(0, 0, 0,
+                                    0) ) { %>
+
                                     <p class="fs-4 text-success">
-                                        <%= afterDiscount(item) %> <span class="">EGP</span>
+                                        <%= afterDiscount(item).price %> <span class="">EGP</span>
                                     </p>
                                     <div class="old d-flex justify-content-between">
 

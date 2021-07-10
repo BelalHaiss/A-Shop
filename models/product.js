@@ -49,7 +49,8 @@ const PromotionSchema = new mongoose_1.Schema({
     createdAt: {
         type: Date,
         min: '2021-06-23',
-        max: '2035-05-23'
+        max: '2035-05-23',
+        required: true
     },
     allProduct: {
         type: Boolean,
@@ -68,14 +69,14 @@ const PromotionSchema = new mongoose_1.Schema({
 });
 PromotionSchema.post('save', function (doc) {
     return __awaiter(this, void 0, void 0, function* () {
-        const docDate = doc.createdAt.toISOString();
-        const nowDate = new Date().toISOString();
-        docDate < nowDate || docDate === nowDate
+        const docDate = doc.createdAt.setHours(0, 0, 0, 0);
+        const nowDate = new Date().setHours(0, 0, 0, 0);
+        docDate <= nowDate
             ? null
             : yield exports.Promotion.findByIdAndUpdate(doc._id, {
                 active: false
             });
-        if (doc.allProduct === true && (docDate < nowDate || docDate === nowDate)) {
+        if (doc.allProduct === true && docDate >= nowDate) {
             yield Product.updateMany({}, { promotion: doc._id });
         }
     });
@@ -137,6 +138,11 @@ productSchmea.post('findOneAndRemove', function (doc) {
             });
         }
     });
+});
+productSchmea.virtual('sized').get(function () {
+    if (this.img.url) {
+        return this.img.url.replace('/upload', '/upload/w_900,h_900,,ar_1:1,c_fill,g_auto');
+    }
 });
 const Product = mongoose_1.default.model('Product', productSchmea);
 exports.default = Product;
