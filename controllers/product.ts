@@ -58,9 +58,7 @@ export const addToCart = async (req, res, next) => {
             price: finalPrice,
             discount
           },
-          user,
-          total: finalPrice,
-          subTotal: itemPrice
+          user
         });
 
         user.cart = newCart._id;
@@ -82,8 +80,7 @@ export const addToCart = async (req, res, next) => {
           price: finalPrice,
           discount
         });
-        updatedCart.total = updatedCart.total + finalPrice;
-        updatedCart.subTotal = updatedCart.subTotal + itemPrice;
+
         await updatedCart.save();
 
         !itemIsThere

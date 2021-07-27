@@ -21,16 +21,16 @@ mongoose
   });
 
 const seeds = async () => {
-  // const users = await User.updateMany({}, { cart: undefined });
-  // console.log(users);
-  const promotion = new Promotion({
-    name: 'expired1',
-    percent: 25,
-    createdAt: new Date('2021-07-5'),
-    expired: new Date('2021-07-5')
-  });
-  promotion.save();
-  console.log(promotion);
+  const users = await User.updateMany({}, { cart: undefined });
+  console.log(users);
+  // const promotion = new Promotion({
+  //   name: 'expired1',
+  //   percent: 25,
+  //   createdAt: new Date('2021-07-5'),
+  //   expired: new Date('2021-07-5')
+  // });
+  // promotion.save();
+  // console.log(promotion);
 };
 seeds();
 

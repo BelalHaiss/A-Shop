@@ -64,9 +64,7 @@ const addToCart = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                         price: finalPrice,
                         discount
                     },
-                    user,
-                    total: finalPrice,
-                    subTotal: itemPrice
+                    user
                 });
                 user.cart = newCart._id;
                 req.flash('success', 'Added To The Cart');
@@ -85,8 +83,6 @@ const addToCart = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                     price: finalPrice,
                     discount
                 });
-                updatedCart.total = updatedCart.total + finalPrice;
-                updatedCart.subTotal = updatedCart.subTotal + itemPrice;
                 yield updatedCart.save();
                 !itemIsThere
                     ? req.flash('success', 'Added To The Cart')

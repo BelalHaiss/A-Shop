@@ -28,4 +28,5 @@ router
     .route('/')
     .get(middleware_js_1.isAuth, middleware_js_1.wrapAsync(Cart_js_1.viewCart))
     .post(middleware_js_1.isAuth, middleware_js_1.wrapAsync(Cart_js_1.deleteFromCart));
+router.route('/:id').post(middleware_js_1.isAuth, middleware_js_1.wrapAsync(Cart_js_1.checkout));
 exports.default = router;

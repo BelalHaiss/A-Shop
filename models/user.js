@@ -30,7 +30,8 @@ const userSchema = new mongoose_1.default.Schema({
     cart: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'Cart'
-    }
+    },
+    orders: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Order' }]
 });
 userSchema.plugin(passport_local_mongoose_1.default);
 const User = mongoose_1.default.model('User', userSchema);

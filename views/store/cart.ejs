@@ -1,7 +1,7 @@
 <%- layout('layout/boilerplate') %>
     <div class="row">
 
-        <% if(cart.products.length < 1) { %>
+        <% if( !req.user.cart) { %>
             <div id="alert" class="alert alert-warning mt-5 alert-dismissible fade show" role="alert">
                 <strong class="text-center">
                     You didn`t add any product to your Cart yet
@@ -10,10 +10,7 @@
             </div>
             <% } else { %>
 
-                <!-- <b class="fs-5"> total <%= cart.total %>
-                </b>
-                <b class="fs-5"> total <%= cart.products[0] %>
-                </b> -->
+
                 <div class="col-12 col-md-8">
 
                     <h5 class="my-3">Cart (<%= cart.products.length %> Items )</h5>
@@ -73,11 +70,38 @@
 
                         <% } %>
                 </div>
-                <div class="col-12 col-md-4">
-                    <div class="my-5 p-1 border cart-checkout">
+                <div class="col-12 col-md-4 mt-2">
+                    <form method="POST" action="/cart/<%= cart._id %> " class="my-5 p-3 border cart-checkout">
                         <b>Order Summary</b>
-                        <p>Subtotal: </p>
-                    </div>
+                        <div class="subtotal d-flex justify-content-between">
+                            <p class=" mb-0">Subtotal <span style="font-size: smaller;" class="fw-lighter text-muted"> (
+                                    <%= cart.products.length %>
+                                        items
+                                        )
+                                </span>
+                            </p>
+                            <span class=" me-3">
+                                <%= cart.products.length && cart.products.map(item => +item.price ).reduce((total,price)=>total+price) -+( cart.products.length && cart.products.map(item => +item.discount ).reduce((total,price)=>total+price)) %> EGP
+                            </span>
+                        </div>
+                        <div class="  d-flex justify-content-between total-discount">
+                            <p>Discount 
+                            </p>
+                            <span class="me-3">
+                                <%= cart.products.length && cart.products.map(item => +item.discount ).reduce((total,price)=>total+price) %>EGP
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="cart-total d-flex justify-content-between">
+                            <p class="fs-4">Total
+                            </p>
+                            <b class="text-success fs-4 me-5">
+                                <%= cart.products.length && cart.products.map(item => +item.price ).reduce((total,price)=>total+price) %>EGP
+                            </b>
+                        </div>
+
+                        <button class="btn w-100 btn-success bold fw-bolder">CHECKOUT</button>
+                    </form>
                 </div>
     </div>
     <% } %>

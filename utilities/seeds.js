@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const product_js_1 = require("../models/product.js");
+const user_js_1 = __importDefault(require("../models/user.js"));
 const dbUrl = 'mongodb://localhost:27017/a-shop';
 mongoose_1.default
     .connect(dbUrl, {
@@ -30,16 +30,16 @@ mongoose_1.default
     console.log(e);
 });
 const seeds = () => __awaiter(void 0, void 0, void 0, function* () {
-    // const users = await User.updateMany({}, { cart: undefined });
-    // console.log(users);
-    const promotion = new product_js_1.Promotion({
-        name: 'expired1',
-        percent: 25,
-        createdAt: new Date('2021-07-5'),
-        expired: new Date('2021-07-5')
-    });
-    promotion.save();
-    console.log(promotion);
+    const users = yield user_js_1.default.updateMany({}, { cart: undefined });
+    console.log(users);
+    // const promotion = new Promotion({
+    //   name: 'expired1',
+    //   percent: 25,
+    //   createdAt: new Date('2021-07-5'),
+    //   expired: new Date('2021-07-5')
+    // });
+    // promotion.save();
+    // console.log(promotion);
 });
 seeds();
 // Product.findById('60d245bf84989b47e49a874c').then((res: void) => {
